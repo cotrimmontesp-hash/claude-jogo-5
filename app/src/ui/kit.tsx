@@ -32,7 +32,11 @@ export function useInfo<T>(get: () => T): T {
 }
 
 /** texto pixelado com sombra dura embaixo */
+/* a fonte pixelada não tem Á, Í, Ó, Ú maiúsculos bonitos: troca pela letra sem acento */
+const FIXC: { [k: string]: string } = { 'Á': 'A', 'Í': 'I', 'Ó': 'O', 'Ú': 'U' };
+const fixTxt = (c: any) => typeof c === 'string' ? c.replace(/[ÁÍÓÚ]/g, m => FIXC[m]) : Array.isArray(c) ? c.map(fixTxt) : c;
 export function T({ children, size = 10, color = C.white, shadow = true, style, lines, center }: { children: any; size?: number; color?: string; shadow?: boolean | string; style?: StyleProp<TextStyle>; lines?: number; center?: boolean }) {
+  children = fixTxt(children);
   const base: TextStyle = { fontFamily: PIX, fontSize: size, lineHeight: Math.round(size * 1.5), color, textAlign: center ? 'center' : 'left' };
   if (!shadow) return <Text numberOfLines={lines} style={[base, style]}>{children}</Text>;
   const d = Math.max(1, Math.round(size / 8));

@@ -50,7 +50,7 @@ function Home() {
           <Coins n={m.coins} />
           <View style={{ flexDirection: 'row' }}>
             <Btn label={m.sfx ? 'SOM' : 'SOM ×'} onPress={() => game.act.toggleSfx()} color={m.sfx ? C.panel2 : C.dim} text={C.white} size={8} padH={8} padV={6} />
-            <Btn label={m.mus ? 'MÚSICA' : 'MÚSICA ×'} onPress={() => game.act.toggleMus()} color={m.mus ? C.panel2 : C.dim} text={C.white} size={8} padH={8} padV={6} />
+            <Btn label={m.mus ? 'MUSICA' : 'MUSICA ×'} onPress={() => game.act.toggleMus()} color={m.mus ? C.panel2 : C.dim} text={C.white} size={8} padH={8} padV={6} />
           </View>
         </View>
       </View>
@@ -235,7 +235,7 @@ function Room() {
       <Top title="SALA" onBack={() => game.act.leaveRoom()} />
       <View style={{ flex: 1, flexDirection: 'row', gap: 12 }}>
         <Panel style={{ width: 210, alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-          <T size={8} color={C.gray} shadow={false}>CÓDIGO DA SALA</T>
+          <T size={8} color={C.gray} shadow={false}>Código da sala</T>
           <T size={30} color={C.gold} shadow={C.red}>{r.code}</T>
           <Btn label="CHAMAR AMIGOS" onPress={() => game.act.shareRoom()} color={C.cyan} size={9} />
           {r.host ? <Btn label="COMEÇAR!" onPress={() => game.act.startRoom()} color={r.players.length >= 2 ? C.gold : C.dim} size={11} />
@@ -276,7 +276,7 @@ function Pause() {
         <Btn label={online ? 'SAIR DA CORRIDA' : 'SAIR'} onPress={() => game.act.quit()} color={C.red} text={C.white} />
         <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 4 }}>
           <Btn label={m.sfx ? 'SOM' : 'SOM ×'} onPress={() => game.act.toggleSfx()} color={C.panel2} text={C.white} size={8} padH={8} padV={6} />
-          <Btn label={m.mus ? 'MÚSICA' : 'MÚSICA ×'} onPress={() => game.act.toggleMus()} color={C.panel2} text={C.white} size={8} padH={8} padV={6} />
+          <Btn label={m.mus ? 'MUSICA' : 'MUSICA ×'} onPress={() => game.act.toggleMus()} color={C.panel2} text={C.white} size={8} padH={8} padV={6} />
         </View>
       </Panel>
     </Ov>
