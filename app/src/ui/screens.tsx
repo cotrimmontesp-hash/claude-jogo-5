@@ -81,25 +81,27 @@ function Home() {
 function Champ() {
   const game = useGame(), lay = useLay();
   const c = useInfo(() => game.info.champ());
-  const cw = Math.floor((lay.W - lay.ins.l - lay.ins.r - 28 - 3 * 10) / 4);
+  const cw = Math.floor((lay.W - lay.ins.l - lay.ins.r - 28 - 22 - 3 * 8 - 6) / 4);
   return (
     <Ov dim={.7} center={false}>
       <Top title={'CAMPEONATO  ★ ' + c.stars} coins={c.coins} />
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: 10, paddingBottom: 10 }} showsVerticalScrollIndicator={false}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: 8, paddingBottom: 6 }} showsVerticalScrollIndicator={false}>
         {c.cups.map((cup: any) => (
-          <View key={cup.name}>
-            <T size={9} color={cup.col} style={{ marginBottom: 5 }}>{cup.name.toUpperCase()}</T>
-            <View style={{ flexDirection: 'row', gap: 10 }}>
+          <View key={cup.name} style={{ flexDirection: 'row', gap: 6 }}>
+            <View style={{ width: 22, backgroundColor: cup.col, borderWidth: 3, borderColor: '#000', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+              {cup.name.replace('Copa ', '').toUpperCase().split('').map((ch: string, k: number) => <T key={k} size={7} color="#000" shadow={false}>{ch}</T>)}
+            </View>
+            <View style={{ flexDirection: 'row', gap: 8 }}>
               {cup.stages.map((s: any) => (
                 <Pressable key={s.i} onPress={() => { game.act.btnSound('click'); game.act.playStage(s.i); }} accessibilityLabel={'Etapa ' + (s.i + 1) + ' ' + s.name}>
-                  <Panel style={{ width: cw, minHeight: 78, opacity: s.locked ? .55 : 1 }} color={s.locked ? '#101024' : C.panel2}>
+                  <Panel style={{ width: cw, paddingVertical: 6, paddingHorizontal: 7, opacity: s.locked ? .55 : 1 }} color={s.locked ? '#101024' : C.panel2}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                       <T size={8} color={C.gray}>{'ETAPA ' + (s.i + 1)}</T>
                       {s.locked ? <T size={8} color={C.gray}>🔒</T> : <Stars n={s.stars} size={8} />}
                     </View>
-                    <T size={cw < 160 ? 8 : 9} color={C.white} style={{ marginTop: 6 }} lines={2}>{s.name}</T>
-                    <T size={7} color={C.cyan} shadow={false} style={{ marginTop: 4 }} lines={1}>{s.scene + ' · ' + s.tods}</T>
-                    <T size={7} color={C.gold} shadow={false} style={{ marginTop: 4 }}>{'⚑ ' + s.target + ' carros · ' + s.time + 's'}</T>
+                    <T size={cw < 170 ? 7 : 8} color={C.white} style={{ marginTop: 4 }} lines={1}>{s.name}</T>
+                    <T size={6} color={C.cyan} shadow={false} style={{ marginTop: 3 }} lines={1}>{s.scene + ' · ' + s.tods}</T>
+                    <T size={6} color={C.gold} shadow={false} style={{ marginTop: 3 }} lines={1}>{s.target + ' carros · ' + s.time + 's'}</T>
                   </Panel>
                 </Pressable>
               ))}
@@ -122,7 +124,7 @@ function Bar({ v, col }: { v: number; col: string }) {
 function Garage() {
   const game = useGame(), lay = useLay();
   const g = useInfo(() => game.info.garage());
-  const imgW = lay.short ? 160 : 210;
+  const imgW = lay.short ? 128 : 190;
   return (
     <Ov dim={.75} center={false}>
       <Top title="GARAGEM" coins={g.coins} />
@@ -137,9 +139,21 @@ function Garage() {
             </View>
             <Btn label="►" onPress={() => game.act.garageNext()} color={C.panel2} text={C.white} padH={9} padV={7} />
           </View>
+          <T size={6} color={C.white} shadow={false} center style={{ maxWidth: 300, lineHeight: 10 }}>{g.desc}</T>
           <Pix uri={g.img} w={imgW} h={imgW * 20 / 32} />
-          <T size={7} color={C.white} shadow={false} center style={{ maxWidth: 260 }}>{g.desc}</T>
-          <View style={{ flexDirection: 'row', gap: 4, marginTop: 4 }}>
+          <View style={{ alignItems: 'center', gap: 4 }}>
+            <T size={6} color={C.gray} shadow={false}>{'COR  (nova: $ ' + g.colorPrice + ')'}</T>
+            <View style={{ flexDirection: 'row', gap: 4 }}>
+              {g.colors.map((c: any, i: number) => (
+                <Pressable key={i} onPress={() => game.act.colorPick(i)} accessibilityLabel={c.name}>
+                  <View style={{ width: 19, height: 19, backgroundColor: c.c, borderWidth: c.sel ? 3 : 2, borderColor: c.sel ? C.white : '#000', alignItems: 'center', justifyContent: 'center' }}>
+                    {!c.owned && <T size={6} color="#000" shadow={false}>$</T>}
+                  </View>
+                </Pressable>
+              ))}
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', gap: 4 }}>
             {g.thumbs.map((t: any, i: number) => (
               <Pressable key={i} onPress={() => { game.act.btnSound('click'); game.act.garageSel(i); }} accessibilityLabel={t.name}>
                 <View style={{ borderWidth: 2, borderColor: t.sel ? C.gold : '#000', backgroundColor: '#0b0b1e', padding: 2, opacity: t.owned ? 1 : .45 }}>
@@ -151,7 +165,7 @@ function Garage() {
         </Panel>
         {/* números e melhorias */}
         <Panel style={{ flex: 1.15, gap: 6 }}>
-          <ScrollView contentContainerStyle={{ gap: 7 }} showsVerticalScrollIndicator={false}>
+          <ScrollView contentContainerStyle={{ gap: 6 }} showsVerticalScrollIndicator={false}>
             {g.stats.map((s: any) => (
               <View key={s.k} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                 <T size={7} color={C.gray} shadow={false} style={{ width: 104 }}>{s.k.toUpperCase()}</T>
@@ -172,17 +186,6 @@ function Garage() {
                   : <Btn label={'$ ' + u.cost} onPress={() => game.act.upgBuy(k)} color={g.coins >= u.cost ? C.gold : C.dim} size={8} padH={8} padV={6} sound={null} />}
               </View>
             )) : <T size={8} color={C.gray} shadow={false}>Compre o carro para melhorar motor, turbo e pneus.</T>}
-            <View style={{ height: 2, backgroundColor: '#000', marginVertical: 2 }} />
-            <T size={7} color={C.gray} shadow={false}>{'COR  (nova: $ ' + g.colorPrice + ')'}</T>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 5 }}>
-              {g.colors.map((c: any, i: number) => (
-                <Pressable key={i} onPress={() => game.act.colorPick(i)} accessibilityLabel={c.name}>
-                  <View style={{ width: 22, height: 22, backgroundColor: c.c, borderWidth: c.sel ? 3 : 2, borderColor: c.sel ? C.white : '#000', alignItems: 'center', justifyContent: 'center' }}>
-                    {!c.owned && <T size={7} color="#000" shadow={false}>$</T>}
-                  </View>
-                </Pressable>
-              ))}
-            </View>
           </ScrollView>
           {!g.owned ? <Btn label={'COMPRAR  $ ' + g.price} onPress={() => game.act.garageBuy()} color={g.coins >= g.price ? C.gold : C.dim} size={10} sound={null} />
             : g.using ? <Btn label="NA PISTA ✓" color={C.green} text={C.white} size={10} disabled />
